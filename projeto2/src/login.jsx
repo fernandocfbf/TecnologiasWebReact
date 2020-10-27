@@ -8,15 +8,27 @@ export default class Login extends Component {
         // Inicializando o State com alguns valores para testarmos
         //é necessario iniciar o state
         this.state = {
-            lista: [
-                { username: 'mrbrightside' },
-                { username: 'jenny' }
-            ], usuario: { nome: '' }
+            success: false
         }
 
         this.handleChange = this.handleChange.bind(this)
         this.cadastrar = this.cadastrar.bind(this)
         this.entrar = this.entrar.bind(this)
+    }
+
+    
+    entrar(){
+        // Fazendo a requisição assíncrona do GET lista de usuários e atualizando o state
+        axios.post('http://localhost:3000/login')
+            .then(resp => {
+                console.log(resp)
+                if (Math.floor(resp.status / 100) === 2) { // Checa se o response status code é 2XX(sucesso)
+                    this.setState({ success: resp })
+                    return;
+                }
+                console.log(resp)
+            })
+            .catch(erro => console.log(erro))
     }
 
     cadastrar() {
@@ -35,19 +47,6 @@ export default class Login extends Component {
             .catch(erro => console.log(erro))
     }
 
-    entrar(){
-        // Fazendo a requisição assíncrona do GET lista de usuários e atualizando o state
-        axios.get('http://localhost:3000/login')
-            .then(resp => {
-                console.log(resp)
-                if (Math.floor(resp.status / 100) === 2) { // Checa se o response status code é 2XX(sucesso)
-                    this.setState({ lista: resp })
-                    return;
-                }
-                console.log(resp)
-            })
-            .catch(erro => console.log(erro))
-    }
 
     
 
@@ -85,7 +84,7 @@ export default class Login extends Component {
                     value={this.state.usuario.senha}
                     onChange={this.handleChange}/>
 
-                <button onClick={this.cadastrar}>Entrar</button>
+                <button onClick={this.entrar}>Entrar</button>
 
 
             </div>
