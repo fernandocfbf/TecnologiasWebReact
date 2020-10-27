@@ -14,20 +14,9 @@ export default class Login extends Component {
             ], usuario: { nome: '' }
         }
 
-        // Fazendo a requisição assíncrona do GET lista de usuários e atualizando o state
-        axios.get('http://localhost:3000/login')
-            .then(resp => {
-                console.log(resp)
-                if (Math.floor(resp.status / 100) === 2) { // Checa se o response status code é 2XX(sucesso)
-                    this.setState({ lista: resp.data })
-                    return;
-                }
-                console.log(resp)
-            })
-            .catch(erro => console.log(erro))
-
         this.handleChange = this.handleChange.bind(this)
         this.cadastrar = this.cadastrar.bind(this)
+        this.entrar = this.entrar.bind(this)
     }
 
     cadastrar() {
@@ -45,6 +34,22 @@ export default class Login extends Component {
         })
             .catch(erro => console.log(erro))
     }
+
+    entrar(){
+        // Fazendo a requisição assíncrona do GET lista de usuários e atualizando o state
+        axios.get('http://localhost:3000/login')
+            .then(resp => {
+                console.log(resp)
+                if (Math.floor(resp.status / 100) === 2) { // Checa se o response status code é 2XX(sucesso)
+                    this.setState({ lista: resp })
+                    return;
+                }
+                console.log(resp)
+            })
+            .catch(erro => console.log(erro))
+    }
+
+    
 
     // event.target representa o elemento que causou o trigger do evento que chamou o método (no caso, será o input do nome)
     handleChange(event) {
@@ -77,10 +82,10 @@ export default class Login extends Component {
                 <label>Senha</label>
                 
                 <input name="senha"
-                    value={this.state.usuario.username}
+                    value={this.state.usuario.senha}
                     onChange={this.handleChange}/>
 
-                <button onClick={this.cadastrar}>Registrar</button>
+                <button onClick={this.cadastrar}>Entrar</button>
 
 
             </div>

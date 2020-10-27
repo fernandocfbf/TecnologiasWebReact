@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Redirect } from
 'react-router-dom'
 
 import Usuarios from './usuarios'
+import Login from './login'
 // A tag de Redirect irá redirecionar qualquer chamada que não foi
 // mapeada nas Routes para a rota especificada.
 
