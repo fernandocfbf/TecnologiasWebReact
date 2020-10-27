@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios' //importando axios
 
-export default class Usuarios extends Component {
+export default class Login extends Component {
     constructor(props) {
         super(props)
 
@@ -13,8 +13,9 @@ export default class Usuarios extends Component {
                 { username: 'jenny' }
             ], usuario: { nome: '' }
         }
+
         // Fazendo a requisição assíncrona do GET lista de usuários e atualizando o state
-        axios.get('http://localhost:3000/userlist')
+        axios.get('http://localhost:3000/login')
             .then(resp => {
                 console.log(resp)
                 if (Math.floor(resp.status / 100) === 2) { // Checa se o response status code é 2XX(sucesso)
@@ -68,18 +69,20 @@ export default class Usuarios extends Component {
         })
         return (
             <div>
-                <ul> {liUsuarios} </ul>
-                <ul>
-                    <li>
-                        <label>Username</label>
-                        <input name="username"
-                            value={this.state.usuario.username}
-                            onChange={this.handleChange} />
-                    </li>
-                    <li>
-                        <button onClick={this.cadastrar}>Registrar</button>
-                    </li>
-                </ul>
+
+                <label>Username</label>
+                <input name="username"
+                    value={this.state.usuario.username}
+                    onChange={this.handleChange} />
+                <label>Senha</label>
+                
+                <input name="senha"
+                    value={this.state.usuario.username}
+                    onChange={this.handleChange}/>
+
+                <button onClick={this.cadastrar}>Registrar</button>
+
+
             </div>
         )
     }

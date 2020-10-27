@@ -8,7 +8,7 @@ import Usuarios from './usuarios'
 
 export default props => (
     <Router>
-        <Route path='/usuarios' component={Usuarios} />
-        <Redirect from='*' to='/usuarios' />
+        <Route path='/login' component={Login} />
+        <Redirect from='*' to='/login' />
     </Router>
 )
