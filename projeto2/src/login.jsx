@@ -18,6 +18,7 @@ export default class Login extends Component {
                     nome: '',
                     senha: '123',
                     redirect: false,
+                    redirectToCad: false,
                     erro: '',
                     preferencias: []
                 }
@@ -25,7 +26,7 @@ export default class Login extends Component {
         }
 
         this.handleChange = this.handleChange.bind(this)
-        //this.cadastrar = this.cadastrar.bind(this)
+        this.cadastre = this.cadastre.bind(this)
         this.entrar = this.entrar.bind(this)
     }
 
@@ -67,6 +68,15 @@ export default class Login extends Component {
         this.setState(handleState(this.state, event))
     }
 
+    cadastre(){
+        const verifica = {
+            
+            redirectToCad: true,
+            
+        }
+        this.setState({ usuario: verifica })
+    }
+
     render() {
 
         if (this.state.usuario.redirect === true) {
@@ -82,6 +92,17 @@ export default class Login extends Component {
             )
         }
 
+        if (this.state.usuario.redirectToCad === true) {
+            return (
+                <Redirect to={{
+                    pathname: "/cadastro"
+                    
+                }} />
+            )
+        }
+
+
+
         return (
             <div>
 
@@ -95,6 +116,8 @@ export default class Login extends Component {
                     onChange={this.handleChange} /><br></br>
 
                 <button onClick={this.entrar}>Entrar</button>
+                <button onClick={this.cadastre}>Cadastre-se</button>
+
             </div>
         )
     }
