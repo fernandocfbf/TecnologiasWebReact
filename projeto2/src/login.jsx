@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios' //importando axios
+import { Redirect } from 'react-router-dom'
+
 
 export default class Login extends Component {
     constructor(props) {
@@ -9,10 +11,16 @@ export default class Login extends Component {
         //é necessario iniciar o state
         this.state = {
             usuario: [
-                { nome: '' },
-                { username: 'fernandocfbf' },
-                { senha: '123' },
-                { erro: '' }
+                {
+                    nome: '',
+                    id: '',
+                    username: 'fernandocfbf',
+                    nome: '',
+                    senha: '123',
+                    redirect: false,
+                    erro: '',
+                    preferencias: []
+                }
             ]
         }
 
@@ -24,15 +32,27 @@ export default class Login extends Component {
 
     entrar() {
         // Fazendo a requisição assíncrona do GET lista de usuários e atualizando o state
-        axios.post('http://localhost:3000/login', {username: this.state.usuario.username, senha: this.state.usuario.senha})
+        axios.post('http://localhost:3000/login', { username: this.state.usuario.username, senha: this.state.usuario.senha })
             .then(resp => {
-                console.log(resp.data)
                 if (Math.floor(resp.status / 100) === 2) { // Checa se o response status code é 2XX(sucesso)
                     this.setState({ usuario: resp })
+                    if (resp.data.length === 1) 
 
+                        var consertado = resp.data[0]
 
-                    return;
-                }
+                        const json = {
+                            id: consertado._id,
+                            redirect: true,
+                            preferencias: consertado.preferencias,
+                            nome: consertado.name
+                        }
+                        this.setState({ usuario: json })
+
+                        return;
+                    } else {
+                        return;
+                    }
+
             })
             .catch(erro => console.log(erro))
     }
@@ -48,6 +68,20 @@ export default class Login extends Component {
     }
 
     render() {
+
+        if (this.state.usuario.redirect === true) {
+            return (
+                <Redirect to={{
+                    pathname: "/home",
+                    state: {
+                        id: this.state.usuario.id,
+                        nome: this.state.usuario.nome,
+                        preferencias: this.state.usuario.preferencias
+                    }
+                }} />
+            )
+        }
+
         return (
             <div>
 
