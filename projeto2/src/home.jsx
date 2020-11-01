@@ -9,13 +9,13 @@ export default class Home extends Component {
         // Inicializando o State com alguns valores para testarmos
         //é necessario iniciar o state
         this.state = {
-            usuario: [
+            usuario: 
                 {
                     id: this.props.location.state.id,
                     nome: this.props.location.state.nome,
                     preferencias: this.props.location.state.preferencias
                 }
-            ],
+            ,
             redirect: false
         }
 
@@ -32,7 +32,9 @@ export default class Home extends Component {
     }
 
     render() {
-        const preferencias_do_usuario = this.state.usuario[0].preferencias
+        const preferencias_do_usuario = this.state.usuario.preferencias
+
+        console.log("envia",this.state.usuario.id)
 
         if (preferencias_do_usuario.length === 0) {
             return (
@@ -55,9 +57,5 @@ export default class Home extends Component {
             )
 
         }
-
-
-
-
     }
 }
