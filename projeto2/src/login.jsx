@@ -45,7 +45,7 @@ export default class Login extends Component {
                             id: consertado._id,
                             redirect: true,
                             preferencias: consertado.preferencias,
-                            nome: consertado.name
+                            nome: consertado.username
                         }
                         this.setState({ usuario: json })
 

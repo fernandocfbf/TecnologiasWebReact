@@ -34,7 +34,7 @@ export default class Home extends Component {
     render() {
         const preferencias_do_usuario = this.state.usuario.preferencias
 
-        console.log("envia",this.state.usuario.id)
+        console.log("envia",this.state.usuario.nome)
 
         if (preferencias_do_usuario.length === 0) {
             return (

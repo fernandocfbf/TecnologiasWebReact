@@ -9,69 +9,58 @@ export default class preferencias extends Component {
         // Inicializando o State com alguns valores para testarmos
         //é necessario iniciar o state
         this.state = {
-            usuario:
-            {
-                id: this.props.location.state.id,
-                nome: this.props.location.state.nome,
-                preferencias: []
-            },
+            id: this.props.location.state.id,
+            nome: this.props.location.state.nome,
+            preferencias: [],
             redirect: false
         }
 
-        this.handleChange = this.handleChange.bind(this)
         this.addPreferencias = this.addPreferencias.bind(this)
         this.confirma = this.confirma.bind(this)
     }
 
 
-    handleChange(event) {
-        var handleState = (state, event) => {
-            state.usuario[event.target.name] = event.target.value
-            return state
-        }
-
-        this.setState(handleState(this.state, event))
-    }
-
     addPreferencias(event) {
-        console.log(this.state.usuario.preferencias)
+        console.log(this.state.preferencias)
         if (event.target.checked == true) {
-            const addpreferencias = this.state.usuario.preferencias
+            const addpreferencias = this.state.preferencias
             const caixaSelecionada = event.target.value
 
             addpreferencias.push(caixaSelecionada)
-
-            const json = { preferencias: addpreferencias }
-            this.setState({ usuario: json });
+            this.setState({ username: addpreferencias });
         }
 
     }
 
-    confirma() {
+    async confirma() {
+        await axios.post('http://localhost:3000/preferencias', { nome: this.state.nome, preferencias: this.state.preferencias })
         this.setState({ redirect: true })
+        console.log(this.state)
     }
 
-    render() {
-        if (this.state.redirect === true) {
-            return (
-                <Redirect to={
-                    {
-                        pathname: "/home",
-                        state: {
-                            id: this.state.usuario.id,
-                            nome: this.state.usuario.nome,
-                            preferencias: this.state.usuario.preferencias
-                        }
+
+render() {
+    if (this.state.redirect == true) {
+        console.log("ENTREI")
+        return (
+            <Redirect to={
+                {
+                    pathname: "/home",
+                    state: {
+                        id: this.state.id,
+                        nome: this.state.nome,
+                        preferencias: this.state.preferencias
                     }
                 }
-                />
-            )
+            }
+            />
+        )
 
-        } else {
-            return (
-                <div>
-                    <h1>Bem-vindo</h1>
-                    <p>Escolha algumas das opções abaixo para uma melhor experiência</p>
+    } else {
+        return (
+            <div>
+                <h1>Bem-vindo</h1>
+                <p>Escolha algumas das opções abaixo para uma melhor experiência</p>
 
 
                     eletrônicos<input onChange={this.addPreferencias} type="checkbox" value="eletronicos"></input><br></br>
@@ -79,9 +68,9 @@ export default class preferencias extends Component {
                     acessórios<input onChange={this.addPreferencias} type="checkbox" value="acessorios"></input><br></br>
                     calçados<input onChange={this.addPreferencias} type="checkbox" value="calcados"></input><br></br>
 
-                    <button onClick={this.confirma}>Confirmar</button>
-                </div>
-            )
-        }
+                <button onClick={this.confirma}>Confirmar</button>
+            </div>
+        )
     }
+}
 }
