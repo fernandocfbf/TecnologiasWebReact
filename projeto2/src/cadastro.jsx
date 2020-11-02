@@ -15,7 +15,8 @@ export default class Cadastro extends Component {
                 username: 'fernandocfbf' ,
                 email: '',
                 senha: '123' ,
-                erro: '' ,
+                redirectToReferrer: false,
+                erro: '' 
                
             }
             ]
@@ -29,19 +30,30 @@ export default class Cadastro extends Component {
 
     cadastrar() {
         axios.post('http://localhost:3000/adduser', {name: this.state.usuario.name, username: this.state.usuario.username, email: this.state.usuario.email, senha: this.state.usuario.senha})
+        
         .then(resp => {
             if(Math.floor(resp.status/100) === 2) {
                 this.setState((state) => {
-                return {
+                
             
-                    usuario: {
-                    name: '',
-                    username: '',
-                    email: '',
-                    senha: ''},
-                    redirectToReferrer: true 
+                    const verifica = {
+            
+                        
+                            name: '',
+                            username: '',
+                            email: '',
+                            senha: '',
+                            redirectToReferrer: true 
+                        
+                        
+                    }
+                    this.setState({ usuario: verifica })
                     
-                }
+
+                    
+                    
+                
+                
                 
 
             })
@@ -65,7 +77,7 @@ export default class Cadastro extends Component {
 
     render() {
 
-        if (this.state.redirectToReferrer === true) {
+        if (this.state.usuario.redirectToReferrer === true) {
             return (
                 <Redirect to={{
                     pathname: "/login"
@@ -84,17 +96,17 @@ export default class Cadastro extends Component {
                     onChange={this.handleChange} /><br></br>
 
                 <label>Username: </label>
-                <input username="username"
+                <input name="username"
                     value={this.state.usuario.username}
                     onChange={this.handleChange} /><br></br>
 
                 <label>E-mail: </label>
-                <input email="email"
+                <input name="email"
                     value={this.state.usuario.email}
                     onChange={this.handleChange} /><br></br>  
 
                 <label>Senha: </label>
-                <input senha="senha"
+                <input name="senha"
                     value={this.state.usuario.senha}
                     onChange={this.handleChange} /><br></br>
 
