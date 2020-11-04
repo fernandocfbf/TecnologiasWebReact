@@ -9,24 +9,40 @@ export default class Home extends Component {
         // Inicializando o State com alguns valores para testarmos
         //é necessario iniciar o state
         this.state = {
-            usuario: 
-                {
-                    id: this.props.location.state.id,
-                    nome: this.props.location.state.nome,
-                    preferencias: this.props.location.state.preferencias
-                }
+            usuario:
+            {
+                id: this.props.location.state.id,
+                nome: this.props.location.state.nome,
+                preferencias: this.props.location.state.preferencias
+            },
+            produtos: [
+                {price: '0.0',  title: 'mrbrightside', link: "url", image: 'link' }
+
+            ], produto: {title: ''}
             ,
             redirect: false
         }
 
-        axios.get('http://localhost:3000/home').then(
-            console.log("RESPONDEU")
-        )
 
+        // Fazendo a requisição assíncrona do GET lista de usuários e atualizando o state
+        axios.get('http://localhost:3000/home')
+            .then(resp => {
+                console.log(resp.data)
+                if (Math.floor(resp.status / 100) === 2) { // Checa se o response status code é 2XX(sucesso)
 
+                    this.setState({ produtos: resp.data })
+
+                    return;
+                }
+                
+                //console.log(resp.data)
+            })
+            .catch(erro => console.log(erro))
 
         this.handleChange = this.handleChange.bind(this)
     }
+
+
 
     handleChange(event) {
         var handleState = (state, event) => {
@@ -40,7 +56,24 @@ export default class Home extends Component {
     render() {
         const preferencias_do_usuario = this.state.usuario.preferencias
 
-        console.log("envia",this.state.usuario.nome)
+        console.log("envia", this.state.usuario.nome)
+
+
+
+        var produtos = this.state.produtos
+        
+        var liProdutos = produtos.map(produto => {
+            return (
+                
+                <li key={produto.title}>{produto.title}, {produto.price}, "mais detalhes:" {produto.link}, 
+                <img src={produto.image}></img>
+                </li>
+                
+                
+                
+
+            )
+        })
 
         if (preferencias_do_usuario.length === 0) {
             return (
@@ -57,11 +90,21 @@ export default class Home extends Component {
             )
         } else {
             return (
+                <div>
                 <h1>
                     Você já tem preferencias
                 </h1>
+
+                
+                <ul> {liProdutos} </ul>
+                
+                </div>
             )
 
+
+
         }
+
+
     }
 }
