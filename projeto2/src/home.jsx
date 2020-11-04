@@ -19,6 +19,12 @@ export default class Home extends Component {
             redirect: false
         }
 
+        axios.get('http://localhost:3000/home').then(
+            console.log("RESPONDEU")
+        )
+
+
+
         this.handleChange = this.handleChange.bind(this)
     }
 
