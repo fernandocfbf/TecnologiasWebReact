@@ -16,9 +16,9 @@ export default class Home extends Component {
                 preferencias: this.props.location.state.preferencias
             },
             produtos: [
-                {price: '0.0',  title: 'mrbrightside', link: "url", image: 'link' }
+                { price: '0.0', title: 'mrbrightside', link: "url", image: 'link' }
 
-            ], produto: {title: ''}
+            ], produto: { title: '' }
             ,
             redirect: false
         }
@@ -27,19 +27,19 @@ export default class Home extends Component {
         // Fazendo a requisição assíncrona do GET lista de usuários e atualizando o state
         axios.get('http://localhost:3000/home')
             .then(resp => {
-                console.log(resp.data)
                 if (Math.floor(resp.status / 100) === 2) { // Checa se o response status code é 2XX(sucesso)
 
                     this.setState({ produtos: resp.data })
 
                     return;
                 }
-                
+
                 //console.log(resp.data)
             })
             .catch(erro => console.log(erro))
 
         this.handleChange = this.handleChange.bind(this)
+        this.modificaPreferencias = this.modificaPreferencias.bind(this)
     }
 
 
@@ -53,7 +53,26 @@ export default class Home extends Component {
         this.setState(handleState(this.state, event))
     }
 
+    modificaPreferencias(){
+        this.setState({ redirect: true })
+    }
     render() {
+
+        console.log(this.state)
+
+        if(this.state.redirect === true){
+            return (
+                <Redirect to={
+                    {
+                        pathname: "/preferencias",
+                        state: {
+                            preferencias: this.state.usuario.preferencias,
+                        }
+                    }
+                }
+                />
+            )
+        }
         const preferencias_do_usuario = this.state.usuario.preferencias
 
         console.log("envia", this.state.usuario.nome)
@@ -61,17 +80,13 @@ export default class Home extends Component {
 
 
         var produtos = this.state.produtos
-        
+
         var liProdutos = produtos.map(produto => {
             return (
-                
-                <li key={produto.title}>{produto.title}, {produto.price}, "mais detalhes:" {produto.link}, 
-                <img src={produto.image}></img>
-                </li>
-                
-                
-                
 
+                <li key={produto.title}>{produto.title}, {produto.price}, "mais detalhes:" {produto.link},
+                    <img src={produto.image}></img>
+                </li>
             )
         })
 
@@ -83,6 +98,7 @@ export default class Home extends Component {
                         state: {
                             id: this.state.usuario.id,
                             nome: this.state.usuario.nome,
+                            preferencias: this.state.usuario.preferencias
                         }
                     }
                 }
@@ -91,13 +107,19 @@ export default class Home extends Component {
         } else {
             return (
                 <div>
-                <h1>
-                    Você já tem preferencias
+
+                    <header>
+                        <button onClick={this.modificaPreferencias}>Preferências</button>
+                    </header>
+                    <h1>
+                        Você já tem preferencias
                 </h1>
 
-                
-                <ul> {liProdutos} </ul>
-                
+
+
+
+                    <ul> {liProdutos} </ul>
+
                 </div>
             )
 

@@ -11,7 +11,7 @@ export default class preferencias extends Component {
         this.state = {
             id: this.props.location.state.id,
             nome: this.props.location.state.nome,
-            preferencias: [],
+            preferencias: this.props.location.state.preferencias,
             redirect: false,
             data: ['aps', 'todays-deals', 'audible', 'alexa-skills', 'amazon-devices', 'amazonfresh',
                 'mobile-apps', 'arts-crafts', 'automotive', 'baby-products', 'beauty', 'fashion', 'live-explorations',
@@ -34,6 +34,16 @@ export default class preferencias extends Component {
 
             addpreferencias.push(caixaSelecionada)
             this.setState({ username: addpreferencias });
+        } else {
+            var lista = this.state.preferencias
+            var elemento_para_remover = event.target.value
+
+            var index = lista.indexOf(elemento_para_remover);
+            if (index !== -1) {
+                lista.splice(index, 1);
+            }
+            
+            this.setState({preferencias: lista})
         }
 
     }
@@ -68,14 +78,29 @@ export default class preferencias extends Component {
 
             const data = this.state.data
             const liCategorias = data.map(categoria => {
-                return (
+                console.log("preferencias", this.state.preferencias)
+                console.log("categoria", categoria)
+                console.log(this.state.preferencias.includes(categoria))
+                if(this.state.preferencias.includes(categoria)){
+                    return (
 
-                    <div>
-                        <label><input onChange={this.addPreferencias} type="checkbox" name="option" value={categoria}></input>{categoria}</label>
-                        <br></br>
-                    </div>
+                        <div>
+                            <label><input onChange={this.addPreferencias} type="checkbox" name="option" value={categoria} checked="checked"></input>{categoria}</label>
+                            <br></br>
+                        </div>
+    
+                    )
+                } else{
+                    return (
 
-                )
+                        <div>
+                            <label><input onChange={this.addPreferencias} type="checkbox" name="option" value={categoria}></input>{categoria}</label>
+                            <br></br>
+                        </div>
+    
+                    )
+                }
+                
             })
 
             return (
