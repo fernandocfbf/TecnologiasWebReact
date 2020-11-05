@@ -78,7 +78,7 @@ export default class Login extends Component {
     }
 
     render() {
-
+        
         if (this.state.usuario.redirect === true) {
             return (
                 <Redirect to={{

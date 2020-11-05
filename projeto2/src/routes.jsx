@@ -6,6 +6,7 @@ import Login from './login'
 import Home from './home'
 import Preferencias from './preferencias'
 import Cadastro from './cadastro'
+import Cadastrado from './cadastrado'
 // A tag de Redirect irá redirecionar qualquer chamada que não foi
 // mapeada nas Routes para a rota especificada.
 
@@ -16,6 +17,7 @@ export default props => (
         <Route path='/home' component={Home}/>
         <Route path='/preferencias' component={Preferencias}/>
         <Route path='/cadastro' component={Cadastro}/>
+        <Route path='/cadastrado' component={Cadastrado}/>
 
     </Router>
 )

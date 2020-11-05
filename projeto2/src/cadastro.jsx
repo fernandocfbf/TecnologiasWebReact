@@ -31,37 +31,20 @@ export default class Cadastro extends Component {
     cadastrar() {
         axios.post('http://localhost:3000/adduser', {name: this.state.usuario.name, username: this.state.usuario.username, email: this.state.usuario.email, senha: this.state.usuario.senha})
         
-        .then(resp => {
-            if(Math.floor(resp.status/100) === 2) {
-                this.setState((state) => {
-                
-            
                     const verifica = {
             
-                        
+                            redirectToReferrer: true,
                             name: '',
                             username: '',
                             email: '',
-                            senha: '',
-                            redirectToReferrer: true 
-                        
+                            senha: ''
                         
                     }
-                    this.setState({ usuario: verifica })
-                    
-
-                    
-                    
-                
-                
-                
-
-            })
+                    this.setState({ usuario: verifica })     
+            
             return;
-        }
-        console.log(resp)
-        })
-        .catch(erro => console.log(erro))
+            
+
        }
        
 
@@ -77,10 +60,12 @@ export default class Cadastro extends Component {
 
     render() {
 
+        console.log(this.state.usuario.redirectToReferrer)
         if (this.state.usuario.redirectToReferrer === true) {
+            
             return (
                 <Redirect to={{
-                    pathname: "/login"
+                    pathname: "/cadastrado"
                 }} />
             )
             }
