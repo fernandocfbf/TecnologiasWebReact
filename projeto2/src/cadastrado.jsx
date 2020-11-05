@@ -68,6 +68,10 @@ export default class Cadastrado extends Component {
 
                 <h1>
                     Parabéns! Você está Cadastrado
+                    
+
+                </h1>
+                <h1>
                     Faça login e confira os produtos de sua preferência:
 
                 </h1>

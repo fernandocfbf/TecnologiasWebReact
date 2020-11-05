@@ -20,7 +20,9 @@ export default class Home extends Component {
 
             ], produto: { title: '' }
             ,
-            redirect: false
+            redirect: false,
+
+            keyword: ''
         }
 
 
@@ -40,6 +42,7 @@ export default class Home extends Component {
 
         this.handleChange = this.handleChange.bind(this)
         this.modificaPreferencias = this.modificaPreferencias.bind(this)
+        this.busca = this.busca.bind(this)
     }
 
 
@@ -55,10 +58,30 @@ export default class Home extends Component {
 
     modificaPreferencias(){
         this.setState({ redirect: true })
+
     }
+
+
+    busca(){
+
+        axios.post('http://localhost:3000/busca', {keyword: this.state.usuario.keyword})
+            .then(resp => {
+                if (Math.floor(resp.status / 100) === 2) { // Checa se o response status code é 2XX(sucesso)
+
+                    this.setState({ produtos: resp.data })
+
+                    return;
+                }
+
+                //console.log(resp.data)
+            })
+            .catch(erro => console.log(erro))
+
+    }
+
     render() {
 
-        console.log(this.state)
+        console.log(this.state.usuario.keyword)
 
         if(this.state.redirect === true){
             return (
@@ -115,6 +138,11 @@ export default class Home extends Component {
                         Você já tem preferencias
                 </h1>
 
+                
+                <input name="keyword"
+                    value={this.state.usuario.keyword}
+                    onChange={this.handleChange} /><br></br>
+                    <button onClick={this.busca}>Buscar</button>
 
 
 
