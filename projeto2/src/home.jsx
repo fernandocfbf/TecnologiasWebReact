@@ -16,7 +16,7 @@ export default class Home extends Component {
                 preferencias: this.props.location.state.preferencias
             },
             produtos: [
-                { price: '0.0', title: 'mrbrightside', link: "url", image: 'link' }
+                { price: '0.0', title: 'mrbrightside', link: "url", image: 'link', pontuacao: '12', desconto: '0' }
 
             ], produto: { title: '' }
             ,
@@ -40,6 +40,7 @@ export default class Home extends Component {
 
         this.handleChange = this.handleChange.bind(this)
         this.modificaPreferencias = this.modificaPreferencias.bind(this)
+        this.ordenar = this.ordenar.bind(this)
     }
 
 
@@ -53,14 +54,52 @@ export default class Home extends Component {
         this.setState(handleState(this.state, event))
     }
 
-    modificaPreferencias(){
+    ordenar(event) {
+        console.log("STATE", this.state)
+        console.log("VALOR", event.target.value)
+
+        function preco(a, b) {
+            return (a.price - b.price) //faz com que o array seja ordenado numericamente e de ordem crescente.
+        }
+
+        function avaliacao(a, b) {
+            return (a.pontuacao - b.pontuacao) //faz com que o array seja ordenado numericamente e de ordem crescente.
+        }
+
+        function desconto(a, b) {
+            return (a.desconto - b.desconto) //faz com que o array seja ordenado numericamente e de ordem crescente.
+        }
+
+        if (event.target.value === 'menorPreco') {
+            var ordenado = this.state.produtos.sort(preco)
+
+            this.setState({ produtos: ordenado })
+
+        } else if (event.target.value === 'melhorAvaliacao') {
+            var ordenado = this.state.produtos.sort(avaliacao).reverse()
+
+            this.setState({ produtos: ordenado })
+
+        } else if (event.target.value === 'maiorDesconto') {
+            var ordenado = this.state.produtos.sort(desconto).reverse()
+
+            this.setState({ produtos: ordenado })
+
+        } else if (event.target.value === 'maiorPreco') {
+            var ordenado = this.state.produtos.sort(preco).reverse()
+
+            this.setState({ produtos: ordenado })
+
+        }
+
+    }
+
+    modificaPreferencias() {
         this.setState({ redirect: true })
     }
     render() {
 
-        console.log(this.state)
-
-        if(this.state.redirect === true){
+        if (this.state.redirect === true) {
             return (
                 <Redirect to={
                     {
@@ -73,20 +112,31 @@ export default class Home extends Component {
                 />
             )
         }
+
         const preferencias_do_usuario = this.state.usuario.preferencias
-
-        console.log("envia", this.state.usuario.nome)
-
-
 
         var produtos = this.state.produtos
 
         var liProdutos = produtos.map(produto => {
             return (
 
-                <li key={produto.title}>{produto.title}, {produto.price}, "mais detalhes:" {produto.link},
-                    <img src={produto.image}></img>
-                </li>
+                <li key={produto.title}>
+                    <table style={{width:'40%'}}>
+                        <tr>
+                            <img src={produto.image}></img>
+                        </tr>
+                        <tr>
+                            {produto.title}
+                        </tr>
+                        <tr>
+                            Preço: U${produto.price}
+                        </tr>
+                        <tr>
+                            Mais detalhes: {produto.link}
+                        </tr>
+
+                    </table>
+                </li >
             )
         })
 
@@ -111,15 +161,17 @@ export default class Home extends Component {
                     <header>
                         <button onClick={this.modificaPreferencias}>Preferências</button>
                     </header>
-                    <h1>
-                        Você já tem preferencias
-                </h1>
 
+                    <select onChange={this.ordenar} name="options">
+                        <option selected >Escolha um cliente</option>
+                        <option value='menorPreco'>Menor preço</option>
+                        <option value='maiorPreco'>Maior preço</option>
+                        <option value='melhorAvaliacao'>Melhores avaliados</option>
+                        <option value='maiorDesconto'>Melhores descontos</option>
 
+                    </select>
 
-
-                    <ul> {liProdutos} </ul>
-
+                    <ul style={{display:'flex', width:'100%'}}> {liProdutos} </ul>
                 </div>
             )
 
