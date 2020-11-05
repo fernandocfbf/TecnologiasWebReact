@@ -18,11 +18,15 @@ export default class Home extends Component {
             produtos: [
                 { price: '0.0', title: 'mrbrightside', link: "url", image: 'link', pontuacao: '12', desconto: '0', id:'0' }
 
-            ], produto: { title: '' }
-            ,
+            ],
             redirect: false,
+            keyword: '',
+            menorFiltro: '',
+            maiorFiltro: '',
 
-            keyword: ''
+            produtosBack: [
+                { price: '0.0', title: 'mrbrightside', link: "url", image: 'link', pontuacao: '12', desconto: '0' }
+            ]
         }
 
 
@@ -32,6 +36,7 @@ export default class Home extends Component {
                 if (Math.floor(resp.status / 100) === 2) { // Checa se o response status code é 2XX(sucesso)
 
                     this.setState({ produtos: resp.data })
+                    this.setState({ produtosBack: resp.data})
 
                     return;
                 }
@@ -44,6 +49,9 @@ export default class Home extends Component {
         this.modificaPreferencias = this.modificaPreferencias.bind(this)
         this.busca = this.busca.bind(this)
         this.ordenar = this.ordenar.bind(this)
+        this.filtrar = this.filtrar.bind(this)
+        this.pegaMaiorPreco = this.pegaMaiorPreco.bind(this)
+        this.pegaMenorPreco = this.pegaMenorPreco.bind(this)
     }
 
 
@@ -102,29 +110,71 @@ export default class Home extends Component {
 
     }
 
+    busca() {
 
-    busca(){
-
-        axios.post('http://localhost:3000/busca', {keyword: this.state.usuario.keyword})
+        axios.post('http://localhost:3000/busca', { keyword: this.state.usuario.keyword })
             .then(resp => {
                 if (Math.floor(resp.status / 100) === 2) { // Checa se o response status code é 2XX(sucesso)
-
                     this.setState({ produtos: resp.data })
-
                     return;
                 }
-
                 //console.log(resp.data)
             })
             .catch(erro => console.log(erro))
+    }
 
+    pegaMaiorPreco(event) {
+        console.log("MAIOR")
+        var maiorPreco = event.target.value
+
+        this.setState({ maiorFiltro: maiorPreco })
+    }
+
+    pegaMenorPreco(event) {
+        var menorPreco = event.target.value
+        
+
+        this.setState({ menorFiltro: menorPreco })
+    }
+
+    filtrar() {
+        var menorPreco = this.state.menorFiltro
+        var maiorPreco = this.state.maiorFiltro
+
+        if(menorPreco.length == 0){
+            menorPreco = -1
+            console.log("ENTREI")
+            
+        }
+        
+        if(maiorPreco.length == 0){
+            maiorPreco = Infinity
+            console.log("ENTREI")
+        }
+
+        var produtos_atuais = this.state.produtosBack
+
+        function filtra_lista(lista_de_produtos, maior_valor, menor_valor){
+            var i = 0
+
+            var lista_reposta = []
+            for (i; i<lista_de_produtos.length; i++){
+
+                if (lista_de_produtos[i].price < maior_valor && lista_de_produtos[i].price > menor_valor){
+                    lista_reposta.push(lista_de_produtos[i])
+                }
+            }
+
+            return lista_reposta
+        }
+
+
+        var produtos_filtrados = filtra_lista(produtos_atuais, maiorPreco, menorPreco)
+        
+        this.setState({produtos: produtos_filtrados})
     }
 
     render() {
-
-        
-
-        
         if (this.state.redirect === true) {
             return (
                 <Redirect to={
@@ -200,20 +250,25 @@ export default class Home extends Component {
                         Você já tem preferencias
                 </h1>
 
-                
-                <input name="keyword"
-                    value={this.state.usuario.keyword}
-                    onChange={this.handleChange} /><br></br>
+
+                    <input name="keyword"
+                        value={this.state.usuario.keyword}
+                        onChange={this.handleChange} />
                     <button onClick={this.busca}>Buscar</button>
 
+                    <div style={{ display: "block" }}>
+                        Preço mínimo: <input onChange={this.pegaMenorPreco} type='text'></input><br></br>
+                        Preço máximo: <input onChange={this.pegaMaiorPreco} type='text'></input><br></br>
+                        <button onClick={this.filtrar} style={{width:'100px'}}>Filtrar</button>
+                    </div>
 
-                    <select onChange={this.ordenar} name="options">
-                        <option selected >Escolha um cliente</option>
+
+                    Ordenar por: <select onChange={this.ordenar} name="options">
+                        <option selected >Select</option>
                         <option value='menorPreco'>Menor preço</option>
                         <option value='maiorPreco'>Maior preço</option>
                         <option value='melhorAvaliacao'>Melhores avaliados</option>
                         <option value='maiorDesconto'>Melhores descontos</option>
-
                     </select>
 
                     <ul style={{display:'flex', 'flex-wrap': 'wrap', width:'100%'}}> {liProdutos} </ul>
