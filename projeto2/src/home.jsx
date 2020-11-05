@@ -16,7 +16,7 @@ export default class Home extends Component {
                 preferencias: this.props.location.state.preferencias
             },
             produtos: [
-                { price: '0.0', title: 'mrbrightside', link: "url", image: 'link', pontuacao: '12', desconto: '0' }
+                { price: '0.0', title: 'mrbrightside', link: "url", image: 'link', pontuacao: '12', desconto: '0', id:'0' }
 
             ], produto: { title: '' }
             ,
@@ -143,26 +143,35 @@ export default class Home extends Component {
 
         var produtos = this.state.produtos
 
-        var liProdutos = produtos.map(produto => {
+         
+
+        var liProdutos = produtos.map(produto => { 
+            var idProduto = produto.id
+            
+            var url = '/detalhe'+idProduto
+            console.log(url)
+            
             return (
 
-                <li key={produto.title}>
-                    <table style={{width:'40%'}}>
-                        <tr>
-                            <img src={produto.image}></img>
-                        </tr>
-                        <tr>
-                            {produto.title}
-                        </tr>
-                        <tr>
-                            Preço: U${produto.price}
-                        </tr>
-                        <tr>
-                            Mais detalhes: {produto.link}
-                        </tr>
+                
+                <li key={produto.title} style={{display:'flex'}} href={url}>
 
-                    </table>
+                    
+                    <br></br>
+                            <img src={produto.image}></img>
+                            <br></br>
+                        
+                            {produto.title}
+                            <br></br>
+                        
+                            Preço: U${produto.price}
+                            <br></br>
+                        
+                            Mais detalhes: {produto.link}
+                            <br></br>
+    
                 </li >
+                
             )
         })
 
@@ -207,7 +216,7 @@ export default class Home extends Component {
 
                     </select>
 
-                    <ul style={{display:'flex', width:'100%'}}> {liProdutos} </ul>
+                    <ul style={{display:'flex', 'flex-wrap': 'wrap', width:'100%'}}> {liProdutos} </ul>
                 </div>
             )
 
