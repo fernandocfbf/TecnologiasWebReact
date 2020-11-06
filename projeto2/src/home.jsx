@@ -198,17 +198,19 @@ export default class Home extends Component {
         var liProdutos = produtos.map(produto => { 
             var idProduto = produto.id
             
-            var url = '/detalhe'+idProduto
+            var url = '/detalhe/'+idProduto
             console.log(url)
             
             return (
 
                 
-                <li key={produto.title} style={{display:'flex'}} href={url}>
+                <li key={produto.title} style={{display:'flex'}} >
 
                     
                     <br></br>
-                            <img src={produto.image}></img>
+                            <a href={url}>
+                            <img src={produto.image} ></img>
+                            </a>
                             <br></br>
                         
                             {produto.title}

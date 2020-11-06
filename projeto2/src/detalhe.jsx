@@ -9,19 +9,14 @@ export default class Detalhe extends Component {
         // Inicializando o State com alguns valores para testarmos
         //é necessario iniciar o state
         this.state = {
-            usuario:
-            {
-                id: this.props.location.state.id,
-                nome: this.props.location.state.nome,
-                preferencias: this.props.location.state.preferencias
-            },
+           
 
             detalhes: {
+                price:'0.0',
                 title: 'aa',
                 description:'bbb',
-                recursos: 'ccc',
+                recursos: [],
                 link:'',
-                price:'0.0',
                 images:[]
             
 
@@ -33,7 +28,8 @@ export default class Detalhe extends Component {
         }
         
         // Fazendo a requisição assíncrona do GET lista de usuários e atualizando o state
-        axios.post('http://localhost:3000/produto', {id: this.state.usuario.produto.id})
+        console.log(props.match.params.id)
+        axios.post('http://localhost:3000/produto', {id: props.match.params.id})
             .then(resp => {
                 if (Math.floor(resp.status / 100) === 2) { // Checa se o response status code é 2XX(sucesso)
 
@@ -58,7 +54,23 @@ export default class Detalhe extends Component {
         return (
             <div>
 
-                <li key={detalhes} style={{display:'flex'}} >    
+                <li key={detalhes} style={{display:'flex'}} >   
+                {detalhes.price}
+                <br></br>
+                {detalhes.title}
+                <br></br>
+                {detalhes.description}
+                <br></br>
+                {detalhes.recursos}
+                <br></br>
+                {detalhes.link}
+                <br></br>
+                {detalhes.images}
+
+
+
+
+
 
             </li><button onClick={Amazon}>Comprar</button>
                 

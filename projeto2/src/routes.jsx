@@ -19,7 +19,7 @@ export default props => (
         <Route path='/preferencias' component={Preferencias}/>
         <Route path='/cadastro' component={Cadastro}/>
         <Route path='/cadastrado' component={Cadastrado}/>
-        <Route path='/detalhe' component={Detalhe}/>
+        <Route path='/detalhe/:id' component={Detalhe}/>
 
     </Router>
 )
