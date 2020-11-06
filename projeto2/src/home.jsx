@@ -23,6 +23,8 @@ export default class Home extends Component {
             keyword: '',
             menorFiltro: '',
             maiorFiltro: '',
+            menorDesconto: '',
+            menorAvaliacao:'',
 
             produtosBack: [
                 { price: '0.0', title: 'mrbrightside', link: "url", image: 'link', pontuacao: '12', desconto: '0' }
@@ -52,9 +54,9 @@ export default class Home extends Component {
         this.filtrar = this.filtrar.bind(this)
         this.pegaMaiorPreco = this.pegaMaiorPreco.bind(this)
         this.pegaMenorPreco = this.pegaMenorPreco.bind(this)
+        this.pegaMenorDesconto = this.pegaMenorDesconto.bind(this)
+        this.pegaAvaliacao = this.pegaAvaliacao.bind(this)
     }
-
-
 
     handleChange(event) {
         var handleState = (state, event) => {
@@ -137,30 +139,67 @@ export default class Home extends Component {
         this.setState({ menorFiltro: menorPreco })
     }
 
+    pegaMenorDesconto(event){
+        var menorDesconto = event.target.value
+        this.setState({menorDesconto: menorDesconto})
+    }
+
+    pegaAvaliacao(event){
+        var avaliacao = event.target.value
+        this.setState({menorAvaliacao: avaliacao})
+    }
+
+
     filtrar() {
         var menorPreco = this.state.menorFiltro
         var maiorPreco = this.state.maiorFiltro
 
+        var descontoMinimo = this.state.menorDesconto
+
+        var menorAvaliacao = this.state.menorAvaliacao
+
         if(menorPreco.length == 0){
             menorPreco = -1
-            console.log("ENTREI")
             
         }
         
         if(maiorPreco.length == 0){
             maiorPreco = Infinity
-            console.log("ENTREI")
         }
+
+        if (descontoMinimo.length == 0){
+            descontoMinimo = -1
+        }
+
+
+        if(menorAvaliacao.length == 0){
+            menorAvaliacao = -1
+        }else{
+
+            if(menorAvaliacao == 1){
+                menorAvaliacao = 100
+            } else if(menorAvaliacao == 2){
+                menorAvaliacao = 200
+            }else if(menorAvaliacao == 3){
+                menorAvaliacao = 500
+            }else if(menorAvaliacao == 4){
+                menorAvaliacao = 700
+            }else if(menorAvaliacao == 5){
+                menorAvaliacao = 1100
+            }
+        }
+
+        console.log("AVALIACAO", menorAvaliacao)
 
         var produtos_atuais = this.state.produtosBack
 
-        function filtra_lista(lista_de_produtos, maior_valor, menor_valor){
+        function filtra_lista(lista_de_produtos, maior_valor, menor_valor, desconto, avaliacao){
             var i = 0
 
             var lista_reposta = []
             for (i; i<lista_de_produtos.length; i++){
 
-                if (lista_de_produtos[i].price < maior_valor && lista_de_produtos[i].price > menor_valor){
+                if (lista_de_produtos[i].price < maior_valor && lista_de_produtos[i].price > menor_valor && lista_de_produtos[i].desconto > desconto && lista_de_produtos[i].pontuacao > avaliacao){
                     lista_reposta.push(lista_de_produtos[i])
                 }
             }
@@ -169,7 +208,7 @@ export default class Home extends Component {
         }
 
 
-        var produtos_filtrados = filtra_lista(produtos_atuais, maiorPreco, menorPreco)
+        var produtos_filtrados = filtra_lista(produtos_atuais, maiorPreco, menorPreco, descontoMinimo, menorAvaliacao)
         
         this.setState({produtos: produtos_filtrados})
     }
@@ -247,13 +286,20 @@ export default class Home extends Component {
                         onChange={this.handleChange} />
                     <button onClick={this.busca}>Buscar</button>
 
+
                     <div style={{ display: "block" }}>
-                        Preço mínimo: <input onChange={this.pegaMenorPreco} type='text'></input><br></br>
-                        Preço máximo: <input onChange={this.pegaMaiorPreco} type='text'></input><br></br>
+                        <h2>FILTROS</h2>
+                        Preço mínimo: <input onChange={this.pegaMenorPreco} type='text'></input><br></br> 
+                        Preço máximo: <input onChange={this.pegaMaiorPreco} type='text'></input><br></br><br></br>
+
+                        Desconto mínimo (%): <input onChange={this.pegaMenorDesconto} type='text'></input><br></br>
+
+                        Avaliação(1-5): <input onChange={this.pegaAvaliacao} type='text'></input>
+
                         <button onClick={this.filtrar} style={{width:'100px'}}>Filtrar</button>
                     </div>
 
-
+                    <h2>ORDEM</h2>
                     Ordenar por: <select onChange={this.ordenar} name="options">
                         <option selected >Select</option>
                         <option value='menorPreco'>Menor preço</option>
