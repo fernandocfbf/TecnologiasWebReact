@@ -31,9 +31,8 @@ export default class Home extends Component {
             ]
         }
 
-
         // Fazendo a requisição assíncrona do GET lista de usuários e atualizando o state
-        axios.get('http://localhost:3000/home')
+        axios.post('http://localhost:3000/home', {preferencias: this.state.usuario.preferencias})
             .then(resp => {
                 if (Math.floor(resp.status / 100) === 2) { // Checa se o response status code é 2XX(sucesso)
 
