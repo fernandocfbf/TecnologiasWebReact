@@ -9,19 +9,28 @@ export default class Detalhe extends Component {
         // Inicializando o State com alguns valores para testarmos
         //é necessario iniciar o state
         this.state = {
-           
 
-            detalhes: {
+            usuario:
+            {
+                id: this.props.location.state.id,
+                nome: this.props.location.state.nome,
+                preferencias: this.props.location.state.preferencias
+            },
+
+
+            detalhes: [{
                 price:'0.0',
                 title: 'aa',
                 description:'bbb',
-                recursos: [],
+                recursos: '',
                 link:'',
-                images:[]
-            
+                image:''
+        
+            }],
+            id: props.match.params.id,
 
+            redirect: false
 
-            }
 
            
 
@@ -31,9 +40,10 @@ export default class Detalhe extends Component {
         console.log(props.match.params.id)
         axios.post('http://localhost:3000/produto', {id: props.match.params.id})
             .then(resp => {
+                console.log(resp.data)
                 if (Math.floor(resp.status / 100) === 2) { // Checa se o response status code é 2XX(sucesso)
 
-                    this.setState({ detalhes: resp.data })
+                    this.setState({ detalhes: resp.data[0] })
 
                     return;
                 }
@@ -42,19 +52,44 @@ export default class Detalhe extends Component {
             })
             .catch(erro => console.log(erro))
 
+            this.avaliacao = this.avaliacao.bind(this)
+
     }
+
+    avaliacao(){
+        this.setState({ redirect: true })
+
+    }
+
 
 
     render() {   
         
         
         var detalhes = this.state.detalhes
-        var Amazon = "window.location.href="+this.state.detalhes.link
+
+        if (this.state.redirect === true) {
+            return (
+                <Redirect to={
+                    {
+                        pathname: "/avaliacoes/"+this.state.id,
+                        state: {
+                            id: this.state.usuario.id,
+                            nome: this.state.usuario.nome,
+                            preferencias: this.state.usuario.preferencias,
+                            link: this.state.detalhes.link
+                        }
+                    }
+                }
+                />
+            )
+        }
+        
 
         return (
             <div>
 
-                <li key={detalhes} style={{display:'flex'}} >   
+                <li key={detalhes.title} style={{display:'flex'}} >   
                 {detalhes.price}
                 <br></br>
                 {detalhes.title}
@@ -65,14 +100,16 @@ export default class Detalhe extends Component {
                 <br></br>
                 {detalhes.link}
                 <br></br>
-                {detalhes.images}
+                <img src={detalhes.image} ></img>
 
 
+            </li>
+            <a href={detalhes.link}>
+            <button>Comprar</button>
+            </a>
+            
+            <button onClick={this.avaliacao}>Avaliação do produto</button>
 
-
-
-
-            </li><button onClick={Amazon}>Comprar</button>
                 
             </div>
         )

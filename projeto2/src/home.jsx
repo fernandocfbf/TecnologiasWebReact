@@ -23,10 +23,13 @@ export default class Home extends Component {
             keyword: '',
             menorFiltro: '',
             maiorFiltro: '',
+            redirectDetalhe:false,
 
             produtosBack: [
                 { price: '0.0', title: 'mrbrightside', link: "url", image: 'link', pontuacao: '12', desconto: '0' }
             ]
+
+            
         }
 
 
@@ -52,6 +55,8 @@ export default class Home extends Component {
         this.filtrar = this.filtrar.bind(this)
         this.pegaMaiorPreco = this.pegaMaiorPreco.bind(this)
         this.pegaMenorPreco = this.pegaMenorPreco.bind(this)
+        this.detalhes = this.detalhes.bind(this)
+
     }
 
 
@@ -174,6 +179,13 @@ export default class Home extends Component {
         this.setState({produtos: produtos_filtrados})
     }
 
+    detalhes(){
+        this.setState({ redirectDetalhe: true })
+
+    }
+
+
+
     render() {
         if (this.state.redirect === true) {
             return (
@@ -181,6 +193,7 @@ export default class Home extends Component {
                     {
                         pathname: "/preferencias",
                         state: {
+                            
                             preferencias: this.state.usuario.preferencias,
                         }
                     }
@@ -188,6 +201,10 @@ export default class Home extends Component {
                 />
             )
         }
+
+        
+
+
 
         const preferencias_do_usuario = this.state.usuario.preferencias
 
@@ -197,9 +214,23 @@ export default class Home extends Component {
 
         var liProdutos = produtos.map(produto => { 
             var idProduto = produto.id
+
+            if (this.state.redirectDetalhe === true) {
+                return (
+                    <Redirect to={
+                        {
+                            pathname: '/detalhe/'+idProduto,
+                            state: {
+                                id: this.state.usuario.id,
+                                nome: this.state.usuario.nome,
+                                preferencias: this.state.usuario.preferencias,
+                            }
+                        }
+                    }
+                    />
+                )
+            }
             
-            var url = '/detalhe/'+idProduto
-            console.log(url)
             
             return (
 
@@ -208,9 +239,9 @@ export default class Home extends Component {
 
                     
                     <br></br>
-                            <a href={url}>
+                            
                             <img src={produto.image} ></img>
-                            </a>
+                            
                             <br></br>
                         
                             {produto.title}
@@ -221,6 +252,10 @@ export default class Home extends Component {
                         
                             Mais detalhes: {produto.link}
                             <br></br>
+
+                            
+
+                            <button onClick={this.detalhes}>Veja mais detalhes</button>
     
                 </li >
                 
