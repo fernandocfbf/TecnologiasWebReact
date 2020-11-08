@@ -43,7 +43,7 @@ export default class Detalhe extends Component {
                 console.log(resp.data)
                 if (Math.floor(resp.status / 100) === 2) { // Checa se o response status code é 2XX(sucesso)
 
-                    this.setState({ detalhes: resp.data[0] })
+                    this.setState({detalhes: resp.data[0]})
 
                     return;
                 }

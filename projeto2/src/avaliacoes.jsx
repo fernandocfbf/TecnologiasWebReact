@@ -81,7 +81,7 @@ export default class Avaliacoes extends Component {
             )
 
         })
-
+        console.log(liAva)
         return({liAva});
 
 

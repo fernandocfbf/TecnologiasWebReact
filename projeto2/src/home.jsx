@@ -37,6 +37,7 @@ export default class Home extends Component {
         // Fazendo a requisição assíncrona do GET lista de usuários e atualizando o state
         axios.post('http://localhost:3000/home', {preferencias: this.state.usuario.preferencias})
             .then(resp => {
+                console.log(resp.data)
                 if (Math.floor(resp.status / 100) === 2) { // Checa se o response status code é 2XX(sucesso)
 
                     this.setState({ produtos: resp.data })
@@ -117,7 +118,7 @@ export default class Home extends Component {
     }
 
     busca() {
-
+        console.log(this.state.usuario.keyword)
         axios.post('http://localhost:3000/busca', { keyword: this.state.usuario.keyword })
             .then(resp => {
                 if (Math.floor(resp.status / 100) === 2) { // Checa se o response status code é 2XX(sucesso)
