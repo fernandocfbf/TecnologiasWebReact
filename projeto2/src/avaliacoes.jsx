@@ -47,7 +47,7 @@ export default class Avaliacoes extends Component {
 
     }
 
-    /*
+    
 
     render() { 
         
@@ -80,14 +80,15 @@ export default class Avaliacoes extends Component {
                 </div>
             )
 
-
         })
+
+        return({liAva});
 
 
 
     }
 
-    */
+    
 
 
 
