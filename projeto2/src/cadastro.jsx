@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios' //importando axios
 import { Redirect } from 'react-router-dom'
 
-
+//so pra testar :'(
 export default class Cadastro extends Component {
     constructor(props) {
         super(props)
